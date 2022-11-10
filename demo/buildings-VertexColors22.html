@@ -9,7 +9,7 @@
     <script type="text/javascript" src="https://unpkg.com/@maptalks/gl/dist/maptalksgl.js"></script>
     <script type="text/javascript" src="https://unpkg.com/three@0.138.0/build/three.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/maptalks.three@latest/dist/maptalks.three.js"></script>
-    <script type="text/javascript" src="buildings.js"></script>
+    <script type="text/javascript" src="buildings3.js"></script>
     <style>
         html,
         body {
@@ -31,12 +31,16 @@
     <script>
 
         var map = new maptalks.Map("map", {
-            center: [13.415118329414781, 52.53001062340084],
+            center: [120.15500568525431, 30.277315331771945],
             zoom: 16,
             pitch: 70,
-            // bearing: 180,
-
-            centerCross: true,
+            centerCross: false,
+            doubleClickZoom: false,
+            dragPitch : true,
+             //allow map to drag rotating, true by default
+            dragRotate : true,
+            //enable map to drag pitching and rotating at the same time, false by default
+            dragRotatePitch : true,
             doubleClickZoom: false,
             baseLayer: new maptalks.TileLayer('tile', {
                 urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
@@ -71,8 +75,9 @@
             // var material = new THREE.MeshBasicMaterial({ color: '#3e35cf' });
             // material.vertexColors = THREE.VertexColors;
             features.forEach(function (g) {
-                var heightPerLevel = 20;
+                var heightPerLevel = 8;
                 var levels = g.properties.levels || 1;
+                var buildingName = g.properties.buildingName || '暂无名称'
                 var mesh = threeLayer.toExtrudePolygon(maptalks.GeoJSON.toGeometry(g), {
                     height: levels * heightPerLevel,
                     topColor: '#fff',
@@ -88,9 +93,9 @@
 
                 //infowindow test
                 mesh.setInfoWindow({
-                    content: 'hello world,height:' + levels * heightPerLevel,
-                    title: 'message',
-                    animationDuration: 0,
+                    content: '建筑名称： '+ buildingName +'<br/>建筑楼层:' + levels + '<br/>建筑高度:' + levels * heightPerLevel,
+                    title: '建筑详情',
+                    animationDuration: 0.5,
                     autoOpenOn: false
                 });
 
